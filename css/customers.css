@@ -1,0 +1,107 @@
+:root{
+  /* adjust Halda denim color here (example indigo/denim) */
+  --halda-color: #1e40af; /* change to your preferred hex */
+  --marquee-bg: #ffffff;
+  --logo-max-height: 60px; /* logo height on desktop */
+  --gap: 48px;
+  --speed: 28s; /* lower = faster */
+}
+
+/* Container */
+.customer-marquee{
+  background: var(--marquee-bg);
+  padding: 18px 0;
+  border-top: 2px solid rgba(0,0,0,0.04);
+  border-bottom: 2px solid rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+/* Viewport to mask overflow */
+.marquee-viewport{
+  max-width: 1200px;
+  margin: 100px ;
+  overflow: hidden;
+}
+
+/* Track holds logos horizontally */
+.marquee-track{
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* animation to scroll left -> right */
+  animation: marquee-scroll linear infinite;
+  animation-duration: var(--speed);
+  will-change: transform;
+}
+
+/* Pause on hover/focus for accessibility */
+.customer-marquee:hover .marquee-track,
+.customer-marquee:focus-within .marquee-track{
+  animation-play-state: paused;
+}
+
+/* Single logo item */
+.marquee-track li{
+  display: flex;
+  align-items: center;
+}
+
+/* All logos share same sizing & treatment */
+.customer-logo{
+  max-height: var(--logo-max-height);
+  width: auto;
+  display: block;
+  filter: grayscale(100%) contrast(100%);
+  opacity: 0.92;
+  transition: transform .25s ease, filter .25s ease, opacity .25s ease;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  border-radius: 6px;
+  padding: 6px;
+  background: transparent;
+  box-shadow: 0 2px 8px rgba(30,40,80,0.02);
+}
+
+/* Hover logo: slightly pop */
+.customer-logo:hover,
+.customer-logo:focus{
+  transform: translateY(-4px) scale(1.03);
+  filter: grayscale(0%);
+  opacity: 1;
+  outline: none;
+}
+
+/* Optional: small accent ring for all logos using Halda color */
+.marquee-track li::after{
+  content: "";
+  display: block;
+  height: 4px;
+  width: 48px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, rgba(30,40,175,0.9), rgba(30,40,175,0.6));
+  border-radius: 4px;
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px){
+  :root{ --logo-max-height: 48px; --gap: 32px; --speed: 22s; }
+}
+@media (max-width: 540px){
+  :root{ --logo-max-height: 36px; --gap: 20px; --speed: 16s; }
+}
+
+/* Make the marquee loop smoothly.
+   This keyframe assumes the track length is at least twice the viewport.
+   If logos count is small, duplicate items in HTML or use JS to duplicate. */
+@keyframes marquee-scroll{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); } /* translate by half when track duplicated */
+}
+
+/* Accessibility: allow keyboard users to pause */
+.marquee-viewport:focus { outline: 2px solid var(--halda-color); outline-offset: 6px; }
